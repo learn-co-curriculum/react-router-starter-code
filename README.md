@@ -1,118 +1,127 @@
-# Component-Lifecycle-Methods
+# React Router
 
 ## SWBATs
-* Identify why we fetch data using ComponentDidMount
-* Write methods that interact with data at different points throughout a component's life
+* Understand how **client side routing** works
+* Create **a new route** from one component to another component
+* Send **router-props and props** through the new route
+* Use **<Link/>** and **history.push()** to go to different route
+
+## Resources
+* [React Router Quickstart](https://reacttraining.com/react-router/web/guides/quick-start)
+* [Learn's Intro to Client-Side Routing](https://github.com/learn-co-curriculum/react-introduction-to-react-router)
+* [A Simple React Router v4 Tutorial](https://medium.com/@pshrmn/a-simple-react-router-v4-tutorial-7f23ff27adf)
 
 ## Outline
 
-     5m Show Parent & Child Lifecycles
-    10m ComponentDidMount for Fetch Requests
-     5m ComponentWillUnmount
-    10m ComponentDidUpdate
+    10m Theoretical Prerequisites
+    5m But what does React Router Actually Do?
+    5m Setup and Components
+    25m Using the Router Components
     ===
-    30m Total
+    45m Total
 
-### Lifecycle Methods
+### Theoretical Prerequisites
 
-[Docs](https://reactjs.org/docs/react-component.html#the-component-lifecycle)
+##### Static vs. Dynamic Routing
 
-[React Lifecycle Methods Diagram](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+Static routing is what we're used to with Rails. Basically, we define the routes beforehand, and then render their actions separately.
 
-- *constructor(props)*
-- *render()*
-- *componentDidMount()*
-- *componentDidUpdate()*
-- *componentWillUnmount()*
+React Router is Different. Basically, the app "renders" routes _while_ rendering all of the JSX. This means no external `routes.*` configuration.
 
-#### Birth (Mounting)
-- *constructor()*
-  - called before it is mounted
-- *render()*
-  - called after mounting and updating
-- *componentDidMount()*
-  - invoked immediately after a component is mounted (inserted into the tree). Initialization that requires DOM nodes should go here. If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+##### Client-side routing
 
-#### Life (Updating)
-- *render()*
-  - called after mounting and updating
-- *componentDidUpdate(prevProps, prevState)*
-  - invoked immediately after updating occurs. This method is not called for the initial render
+Now that the React stack is handling routing, that means none of our routes require a new `GET` request to the backend to get that page's HTML. This allows us to enforce the "Single Page App", since we can render the new route's page without refreshing.
 
-#### Death (Unmounting)
-- *componentWillUnmount()*
-  -  invoked immediately before a component is unmounted and destroyed. Perform any necessary cleanup in this method, such as invalidating timers, canceling network requests, or cleaning up any subscriptions that were created in componentDidMount().
+##### Why do we even need routes?
 
-### Show Parent & Child Lifecycles
+* The user can use forward/back to navigate your app
+* The user can navigate via urls
+* We can make urls describe the action that the user might be taking
 
-* Add `console.log` inside constructor() and render() and show console prints
+##### What are the drawbacks to client-side routing?
 
-```js
-//App.js
+* We're loading all of our frontend at once, so it might add to the initial load time
+* We have to design all of our routes to be coupled with our component structure (which can be a good thing long-term)
 
-constructor(){
-    console.log("APP: Constructor")
-    ...
-}
+### But what does React Router Actually Do?
 
-render(){
-  console.log("APP: Render")
-  ...
-}
-```
-### ComponentDidMount for Fetch Requests
+Ultimately, we're still in a Single-Page application. Show that you can use vanilla JS to change the route in the terminal using the following commands.
 
-* Create `componentDidMount()` inside App component. Add `console.log` and `fetch` painting data from json-server. 
+### Setup and Components
 
-* Explain: ComponentDidMount for Fetch Requests
+You can use `create-react-app` in conjunction with `react-router`, just install with `npm install react-router-dom`.
+
+Now, we can add the requisite components with
 
 ```js
-//App.js
-componentDidMount(){
-  console.log("APP: ComponentDidMount")
-
-  fetch("http://localhost:3000/paintings")
-  .then(res => res.json())
-  .then(paintings => this.setState({ paintings })) //explain paintings is same as paintings: paintings
-}
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 ```
 
-### ComponentWillUnmount
+#### Router
 
-* Explain how method is invoked when `PaintingForm` component is unmount because of conditional rendering.
+We'll use this in one place in our application (and one place only). Very top level, essentially listening for when the route changes, and making that info accessible.
+
+#### Route
+
+Conditionally render a certain component based on what the route looks like. Explain how we are removing conditional rendering and using routes.
 
 ```js
-//PaintingForm.js
-
-componentWillUnmount(){
-  console.log("PaintingForm: ComponentWillUnmount")
-}
+// App.js
+<Route path="/paintings" component={PaintingsList} />
 ```
 
-### ComponentDidUpdate
+Go through the process of building a app with routing. Start by wrapping your top-level app in the router in `app.js`:
 
-* Explain how method is invoked when `votes` state is changing for `Painting` component
+```jsx
+<BrowserRouter>
+  <NavBar />
+</BrowserRouter>
+```
+Explain how routes are different but `NavBar` is still there.
 
-* Watch out for infinite loops if setting state!
+How to sent props with routes?
 
 ```js
-//Painting.js
+// App.js
 
-componentDidUpdate(prevProps, prevState){
-  console.log("Painting: ComponentDidUpdate")
+<Route path="/newPainting" render={(routeProps) => <PaintingForm {...routeProps} addPainting={this.addPainting}/>} />
+```
+explain `routeProps` when you explain redirect(`history.push()`).
 
-  // we access props with this.props
-  // and state with this.state
-  
-  // prevState contains state before update
-  // prevProps contains props before update
+#### Switch
 
-  if(prevState.votes < this.state.votes){
-    console.log("Painting got a new vote!")
-  }
-} 
+Pick one of the following routes (the first that matches), don't look at the others (like an if/ else if/ else if).
+
+#### Link
+
+Changes the url we see in the browser, must have a 'to' prop.
+
+```js
+// PaintingList.js
+<Link to="/newPainting"> Add a new painting</Link>
+
+// PaintingForm.js
+<Link to="/paintings"> Go to Painting List </Link>
+
 ```
 
+#### Redirect
 
+Forces a redirect to a particular route. Redirect after adding a new painting. Go thorugh `routeProps`.
 
+```js
+// PaintingForm.js
+this.props.history.push("/paintings")
+```
 
+### Using the Router Components
+
+Go through the process of building a app with routing. Start by wrapping your top-level app in the router in `index.js`:
+
+```jsx
+<BrowserRouter>
+  <App />
+</BrowserRouter>
+```
+
+Now you can make your app render different components using `<Render />` At this stage, it helps to have a separation of information and navigation, so the links can live on their own.

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 class PaintingForm extends React.Component{
 
@@ -28,11 +29,13 @@ class PaintingForm extends React.Component{
     handleSubmit = (e) => {
         e.preventDefault()
         this.props.addPainting(this.state)
+        this.props.history.push("/paintings")
     }
 
     render(){
     return(
     <div>
+        <Link to="/paintings"> Go to Painting List </Link>
         <h1> Add a new Painting</h1>
         <form onSubmit={this.handleSubmit}>
             <input 

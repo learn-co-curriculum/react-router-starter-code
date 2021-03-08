@@ -3,6 +3,7 @@ import 'semantic-ui-css/semantic.min.css';
 import NavBar from './NavBar';
 import PaintingsList from './PaintingsList';
 import PaintingForm from './PaintingForm'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 
 
 class App extends React.Component{
@@ -12,8 +13,7 @@ class App extends React.Component{
     super()
     this.state = {
       color: "red",
-      paintings: [],
-      formView: false
+      paintings: []
     }
   }
 
@@ -27,12 +27,6 @@ class App extends React.Component{
 
   changeColor = () => {
     this.setState({color: "yellow"})
-  }
-
-  toggleForm = () => {
-    this.setState({
-      formView: !this.state.formView
-    })
   }
 
   addPainting = (info) => {
@@ -55,17 +49,16 @@ class App extends React.Component{
 
     this.setState({
       paintings: [...this.state.paintings, newPainting], //.push is not used here because it returns length of an array after adding new element
-      formView: !this.state.formView //to display paintings after adding a new painting info
     })
 
 
   }
 
   render(){
-  console.log("APP: Render")
   
   return (
-    <div>
+    <BrowserRouter>
+      <div>
 
       <NavBar
         color={this.state.color}
@@ -75,13 +68,16 @@ class App extends React.Component{
         changeColor={this.changeColor}
       />
 
-      <button onClick={this.toggleForm}>Show/Hide new painting form</button>
+      <Switch>
+        {/* <Route path="/paintings" component={PaintingsList} /> */}
+        <Route path="/paintings" render={() => <PaintingsList paintings={this.state.paintings}/>} />
 
-      {this.state.formView 
-      ? <PaintingForm addPainting={this.addPainting} /> 
-      : <PaintingsList paintings={this.state.paintings} />}
+        <Route path="/newPainting" render={(routeProps) => <PaintingForm {...routeProps} addPainting={this.addPainting}/>} />
 
-    </div>
+      </Switch>
+
+      </div>
+    </BrowserRouter>
   )
   }
 }
