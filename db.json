@@ -241,6 +241,28 @@
         "deathday": "1611"
       },
       "votes": 30
+    },
+    {
+      "id": "516dfbcfed1712d0a8000c6d",
+      "collecting_institution": "National Gallery of Art, Washington D.C.",
+      "date": "1645",
+      "dimensions": {
+        "text": "30 5/16 Ã— 25 3/16 in",
+        "height": 30.3125,
+        "width": 25.1875,
+        "depth": null,
+        "diameter": null
+      },
+      "slug": "frans-hals-willem-coymans",
+      "title": "Willem Coymans",
+      "image": "https://d32dm0rphc51dk.cloudfront.net/gXMChrE5re4HdlIP6__LXQ/medium.jpg",
+      "artist": {
+        "name": "Frans Hals",
+        "hometown": "Antwerp, Belgium",
+        "birthday": "1582",
+        "deathday": "1666"
+      },
+      "votes": 25
     }
   ]
 }

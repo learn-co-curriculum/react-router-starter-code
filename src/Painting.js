@@ -16,14 +16,6 @@ class Painting extends React.Component{
   }
 
   componentDidUpdate(prevProps, prevState){
-    console.log("Painting: ComponentDidUpdate")
-
-    // we access props with this.props
-    // and state with this.state
-    
-    // prevState contains state before update
-    // prevProps contains props before update
-
     if(prevState.votes < this.state.votes){
       console.log("Painting got a new vote!")
     }
