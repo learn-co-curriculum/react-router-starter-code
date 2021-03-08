@@ -18,11 +18,9 @@ class App extends React.Component{
   }
 
   componentDidMount(){
-    console.log("APP: ComponentDidMount")
-
     fetch("http://localhost:3000/paintings")
     .then(res => res.json())
-    .then(paintings => this.setState({ paintings })) //explain paintings is same as paintings: paintings
+    .then(paintings => this.setState({ paintings }))
   }
 
   changeColor = () => {
@@ -36,7 +34,6 @@ class App extends React.Component{
   }
 
   addPainting = (info) => {
-    // console.log(info)
 
     const newPainting = {
       // id: this.state.paintings[this.state.paintings.length-1].id + 1, //BONUS to get rid of warning
@@ -54,7 +51,7 @@ class App extends React.Component{
     } // to match painting data format
 
     this.setState({
-      paintings: [...this.state.paintings, newPainting], //.push is not used here because it returns length of an array after adding new element
+      paintings: [...this.state.paintings, newPainting],
       formView: !this.state.formView //to display paintings after adding a new painting info
     })
 
@@ -62,8 +59,6 @@ class App extends React.Component{
   }
 
   render(){
-  console.log("APP: Render")
-  
   return (
     <div>
 
